@@ -2,7 +2,7 @@
   "targets": [
     {
       "target_name": "tree_sitter_runtime_binding",
-      "dependencies": ["tree_sitter"],
+      "dependencies": ["tree_sitter", "<!(node -p \"require('node-addon-api').gyp\")"],
       "sources": [
         "src/binding.cc",
         "src/conversions.cc",
@@ -17,8 +17,13 @@
       ],
       "include_dirs": [
         "vendor/tree-sitter/lib/include",
-        "<!(node -e \"require('nan')\")",
+        "<!@(node -p \"require('node-addon-api').include\")",
       ],
+      "defines": [
+        "NAPI_VERSION=<(napi_build_version)",
+      ],
+      'cflags!': [ '-fno-exceptions' ],
+      'cflags_cc!': [ '-fno-exceptions' ],
       'cflags': [
         '-std=c++17'
       ],
@@ -36,6 +41,7 @@
         ['OS=="win"', {
           'msvs_settings': {
             'VCCLCompilerTool': {
+              'ExceptionHandling': 1,
               'AdditionalOptions': [
                 '/std:c++17',
               ],
@@ -48,10 +54,7 @@
             '-Wno-cast-function-type'
           ]
         }],
-        ['runtime=="electron"', {
-          'defines': ['NODE_RUNTIME_ELECTRON=1']
-        }],
-      ],
+      ]
     },
     {
       "target_name": "tree_sitter",
@@ -73,8 +76,5 @@
     'openssl_fips': '',
     'v8_enable_pointer_compression%': 0,
     'v8_enable_31bit_smis_on_64bit_arch%': 0,
-  },
-  'conditions': [
-      ['runtime=="electron"', { 'defines': ['NODE_RUNTIME_ELECTRON=1'] }],
-  ]
+  }
 }
