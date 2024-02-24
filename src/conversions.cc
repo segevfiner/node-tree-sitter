@@ -1,9 +1,9 @@
+#include "./conversions.h"
 #include <napi.h>
 #include <tree_sitter/api.h>
 #include <cmath>
 #include "./node.h"
 #include "./addon_data.h"
-#include "./conversions.h"
 
 using namespace Napi;
 
@@ -76,7 +76,7 @@ Napi::Object PointToJS(Napi::Env env, const TSPoint &point) {
 }
 
 Napi::Maybe<TSPoint> PointFromJS(const Napi::Value& arg) {
-  Napi::Env env = arg.Env();
+  Env env = arg.Env();
 
   if (!arg.IsObject()) {
     TypeError::New(env, "Point must be a {row, column} object").ThrowAsJavaScriptException();
