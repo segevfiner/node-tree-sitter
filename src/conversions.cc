@@ -14,10 +14,10 @@ static const unsigned BYTES_PER_CHARACTER = 2;
 void InitConversions(Napi::Env env, Napi::Object exports) {
   auto data = env.GetInstanceData<AddonData>();
 
-  // auto js_point_transfer_buffer = Nan::NewBuffer(2 * sizeof(uint32_t)).ToLocalChecked();
-  // data->point_transfer_buffer = reinterpret_cast<uint32_t*>(node::Buffer::Data(js_point_transfer_buffer));
+  auto js_point_transfer_buffer = Uint32Array::New(env, 2);
+  data->point_transfer_buffer = js_point_transfer_buffer.Data();
 
-  // Nan::Set(exports, Nan::New("pointTransferArray").ToLocalChecked(), Uint32Array::New(js_point_transfer_buffer.As<Uint8Array>()->Buffer(), 0, 2));
+  exports["pointTransferArray"] = js_point_transfer_buffer;
 }
 
 void TransferPoint(AddonData* data, const TSPoint &point) {
