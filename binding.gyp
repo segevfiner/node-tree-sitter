@@ -2,7 +2,7 @@
   "targets": [
     {
       "target_name": "tree_sitter_runtime_binding",
-      "dependencies": ["tree_sitter", "<!(node -p \"require('node-addon-api').gyp\")"],
+      "dependencies": ["tree_sitter", "<!(node -p \"require('node-addon-api').targets\"):node_addon_api_except"],
       "sources": [
         "src/binding.cc",
         "src/conversions.cc",
@@ -17,13 +17,10 @@
       ],
       "include_dirs": [
         "vendor/tree-sitter/lib/include",
-        "<!@(node -p \"require('node-addon-api').include\")",
       ],
       "defines": [
         "NAPI_VERSION=<(napi_build_version)",
       ],
-      'cflags!': [ '-fno-exceptions' ],
-      'cflags_cc!': [ '-fno-exceptions' ],
       'cflags': [
         '-std=c++17'
       ],
@@ -33,15 +30,14 @@
       'conditions': [
         ['OS=="mac"', {
           'xcode_settings': {
-            'MACOSX_DEPLOYMENT_TARGET': '10.9',
+            'GCC_SYMBOLS_PRIVATE_EXTERN': 'YES', # -fvisibility=hidden
             'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
-            'CLANG_CXX_LIBRARY': 'libc++',
+            'MACOSX_DEPLOYMENT_TARGET': '10.9',
           },
         }],
         ['OS=="win"', {
           'msvs_settings': {
             'VCCLCompilerTool': {
-              'ExceptionHandling': 1,
               'AdditionalOptions': [
                 '/std:c++17',
               ],
