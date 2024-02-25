@@ -10,8 +10,12 @@ using std::vector;
 namespace node_tree_sitter {
 namespace language_methods {
 
-const TSLanguage *UnwrapLanguage(const Napi::Value &value) {
+const TSLanguage *UnwrapLanguage(Napi::Value value) {
   Napi::Env env = value.Env();
+
+  if (value.IsObject()) {
+    value = value.As<Object>()["language"];
+  }
 
   if (value.IsExternal()) {
     External arg = value.As<External<const TSLanguage>>();

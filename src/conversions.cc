@@ -20,7 +20,8 @@ void InitConversions(Napi::Env env, Napi::Object exports) {
   exports["pointTransferArray"] = js_point_transfer_buffer;
 }
 
-void TransferPoint(AddonData* data, const TSPoint &point) {
+void TransferPoint(Napi::Env env, const TSPoint &point) {
+  auto data = env.GetInstanceData<AddonData>();
   data->point_transfer_buffer[0] = point.row;
   data->point_transfer_buffer[1] = point.column / 2;
 }
@@ -34,7 +35,8 @@ Napi::Object RangeToJS(Napi::Env env, const TSRange &range) {
   return result;
 }
 
-Napi::Maybe<TSRange> RangeFromJS(Napi::Env env, const Napi::Value& arg) {
+Napi::Maybe<TSRange> RangeFromJS(const Napi::Value& arg) {
+  Env env = arg.Env();
   if (!arg.IsObject()) {
     TypeError::New(env, "Range must be a {startPosition, endPosition, startIndex, endIndex} object").ThrowAsJavaScriptException();
     return Napi::Nothing<TSRange>();

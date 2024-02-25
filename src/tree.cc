@@ -107,8 +107,7 @@ Napi::Value Tree::Edit(const Napi::CallbackInfo &info) {
 }
 
 Napi::Value Tree::RootNode(const Napi::CallbackInfo &info) {
-  node_methods::MarshalNode(info, this, ts_tree_root_node(tree_));
-  return info.Env().Undefined();
+  return node_methods::MarshalNode(info, this, ts_tree_root_node(tree_));
 }
 
 Napi::Value Tree::GetChangedRanges(const Napi::CallbackInfo &info) {

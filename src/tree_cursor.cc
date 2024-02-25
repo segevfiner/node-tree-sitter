@@ -94,8 +94,7 @@ Napi::Value TreeCursor::EndPosition(const Napi::CallbackInfo &info) {
 Napi::Value TreeCursor::CurrentNode(const Napi::CallbackInfo &info) {
   const Tree *tree = Tree::UnwrapTree(info.This().As<Object>()["tree"]);
   TSNode node = ts_tree_cursor_current_node(&cursor_);
-  node_methods::MarshalNode(info, tree, node);
-  return info.Env().Undefined();
+  return node_methods::MarshalNode(info, tree, node);
 }
 
 Napi::Value TreeCursor::Reset(const Napi::CallbackInfo &info) {

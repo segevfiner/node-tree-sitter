@@ -11,7 +11,7 @@ namespace language_methods {
 
 void Init(Napi::Env env, Napi::Object);
 
-const TSLanguage *UnwrapLanguage(const Napi::Value &);
+const TSLanguage *UnwrapLanguage(Napi::Value);
 
 }  // namespace language_methods
 }  // namespace node_tree_sitter
