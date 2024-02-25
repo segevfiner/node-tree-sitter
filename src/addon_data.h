@@ -26,6 +26,7 @@ public:
 
   // parser
   Napi::FunctionReference parser_constructor;
+  Napi::FunctionReference string_slice;
 
   // query
   TSQueryCursor *ts_query_cursor = nullptr;
