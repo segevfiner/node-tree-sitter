@@ -1,8 +1,7 @@
 #ifndef NODE_TREE_SITTER_TREE_H_
 #define NODE_TREE_SITTER_TREE_H_
 
-#include <v8.h>
-#include <nan.h>
+#include <napi.h>
 #include <node_object_wrap.h>
 #include <unordered_map>
 #include <tree_sitter/api.h>
@@ -10,16 +9,16 @@
 
 namespace node_tree_sitter {
 
-class Tree : public Nan::ObjectWrap {
+class Tree : public Napi::ObjectWrap<Tree> {
  public:
-  static void Init(v8::Local<v8::Object> exports, v8::Local<v8::External> data_ext);
-  static v8::Local<v8::Value> NewInstance(AddonData* data, TSTree *);
-  static const Tree *UnwrapTree(AddonData* data, const v8::Local<v8::Value> &);
+  static void Init(Napi::Env env, Napi::Object exports);
+  static v8::Local<v8::Value> NewInstance(Napi::Env env, TSTree *);
+  static const Tree *UnwrapTree(const Napi::Value &);
 
   struct NodeCacheEntry {
     Tree *tree;
     const void *key;
-    v8::Persistent<v8::Object> node;
+    Napi::ObjectReference node;
   };
 
   TSTree *tree_;

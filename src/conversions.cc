@@ -7,6 +7,8 @@
 
 using namespace Napi;
 
+// TODO We might be able to just throw instead of using Napi::Maybe
+
 namespace node_tree_sitter {
 
 static const unsigned BYTES_PER_CHARACTER = 2;

@@ -34,8 +34,7 @@ const TSLanguage *UnwrapLanguage(const Napi::Value &value) {
       return language;
     }
   }
-  TypeError::New(env, "Invalid language object").ThrowAsJavaScriptException();
-  return nullptr;
+  throw TypeError::New(env, "Invalid language object");
 }
 
 static Napi::Value GetNodeTypeNamesById(const Napi::CallbackInfo &info) {

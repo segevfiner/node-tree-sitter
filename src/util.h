@@ -1,8 +1,7 @@
 #ifndef NODE_TREE_SITTER_UTIL_H_
 #define NODE_TREE_SITTER_UTIL_H_
 
-#include <v8.h>
-#include <nan.h>
+#include <napi.h>
 
 namespace node_tree_sitter {
 
@@ -15,7 +14,7 @@ struct GetterPair {
 
 struct FunctionPair {
   const char *name;
-  Nan::FunctionCallback callback;
+  Napi::Function::Callback callback;
 };
 
 bool instance_of(v8::Local<v8::Value> value, v8::Local<v8::Object> object);

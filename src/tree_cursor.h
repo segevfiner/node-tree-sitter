@@ -1,18 +1,17 @@
 #ifndef NODE_TREE_SITTER_TREE_CURSOR_H_
 #define NODE_TREE_SITTER_TREE_CURSOR_H_
 
-#include <v8.h>
-#include <nan.h>
+#include <napi.h>
 #include <node_object_wrap.h>
 #include <tree_sitter/api.h>
 #include "./addon_data.h"
 
 namespace node_tree_sitter {
 
-class TreeCursor : public Nan::ObjectWrap {
+class TreeCursor : public Napi::ObjectWrap<TreeCursor> {
  public:
-  static void Init(v8::Local<v8::Object> exports, v8::Local<v8::External> data_ext);
-  static v8::Local<v8::Value> NewInstance(AddonData* data, TSTreeCursor);
+  static void Init(Napi::Env env, Napi::Object exports);
+  static Napi::Value NewInstance(Napi::Env Env, TSTreeCursor);
 
  private:
   explicit TreeCursor(TSTreeCursor);

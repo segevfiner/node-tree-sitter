@@ -30,14 +30,12 @@ public:
   // query
   TSQueryCursor *ts_query_cursor = nullptr;
   Napi::FunctionReference query_constructor;
-  // Nan::Persistent<v8::FunctionTemplate> query_constructor_template;
 
   // tree_cursor
   Napi::FunctionReference tree_cursor_constructor;
 
   // tree
   Napi::FunctionReference tree_constructor;
-  // Nan::Persistent<v8::FunctionTemplate> tree_constructor_template;
 };
 
 }
