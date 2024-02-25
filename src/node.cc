@@ -542,7 +542,7 @@ static Napi::Value Children(const Napi::CallbackInfo &info) {
   AddonData* data = env.GetInstanceData<AddonData>();
   const Tree *tree = Tree::UnwrapTree(info[0]);
   TSNode node = UnmarshalNode(env, tree);
-  if (!node.id) return;
+  if (!node.id) return env.Undefined();
 
   vector<TSNode> result;
   ts_tree_cursor_reset(&data->scratch_cursor, node);
@@ -561,7 +561,7 @@ static Napi::Value NamedChildren(const Napi::CallbackInfo &info) {
   AddonData* data = env.GetInstanceData<AddonData>();
   const Tree *tree = Tree::UnwrapTree(info[0]);
   TSNode node = UnmarshalNode(env, tree);
-  if (!node.id) return;
+  if (!node.id) return env.Undefined();
 
   vector<TSNode> result;
   ts_tree_cursor_reset(&data->scratch_cursor, node);
@@ -582,7 +582,7 @@ static Napi::Value DescendantsOfType(const Napi::CallbackInfo &info) {
   AddonData* data = env.GetInstanceData<AddonData>();
   const Tree *tree = Tree::UnwrapTree(info[0]);
   TSNode node = UnmarshalNode(env, tree);
-  if (!node.id) return;
+  if (!node.id) return env.Undefined();
 
   SymbolSet symbols;
   symbol_set_from_js(&symbols, info[1], ts_tree_language(node.tree));
@@ -592,13 +592,13 @@ static Napi::Value DescendantsOfType(const Napi::CallbackInfo &info) {
 
   if (info.Length() > 2 && info[2].IsObject()) {
     auto maybe_start_point = PointFromJS(info[2]);
-    if (maybe_start_point.IsNothing()) return;
+    if (maybe_start_point.IsNothing()) return env.Undefined();
     start_point = maybe_start_point.Unwrap();
   }
 
   if (info.Length() > 3 && info[3].IsObject()) {
     auto maybe_end_point = PointFromJS(info[3]);
-    if (maybe_end_point.IsNothing()) return;
+    if (maybe_end_point.IsNothing()) return env.Undefined();
     end_point = maybe_end_point.Unwrap();
   }
 
@@ -650,7 +650,7 @@ static Napi::Value ChildNodesForFieldId(const Napi::CallbackInfo &info) {
   AddonData* data = env.GetInstanceData<AddonData>();
   const Tree *tree = Tree::UnwrapTree(info[0]);
   TSNode node = UnmarshalNode(env, tree);
-  if (!node.id) return;
+  if (!node.id) return env.Undefined();
 
   if (!info[1].IsNumber()) {
     throw TypeError::New(env, "Second argument must be an integer");
@@ -692,7 +692,7 @@ static Napi::Value Closest(const Napi::CallbackInfo &info) {
   Env env = info.Env();
   const Tree *tree = Tree::UnwrapTree(info[0]);
   TSNode node = UnmarshalNode(env, tree);
-  if (!node.id) return;
+  if (!node.id) return env.Undefined();
 
   SymbolSet symbols;
   symbol_set_from_js(&symbols, info[1], ts_tree_language(node.tree));

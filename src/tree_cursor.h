@@ -13,26 +13,25 @@ class TreeCursor : public Napi::ObjectWrap<TreeCursor> {
   static void Init(Napi::Env env, Napi::Object exports);
   static Napi::Value NewInstance(Napi::Env Env, TSTreeCursor);
 
- private:
-  explicit TreeCursor(TSTreeCursor);
+  explicit TreeCursor(const Napi::CallbackInfo &);
   ~TreeCursor();
 
-  static void New(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void GotoParent(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void GotoFirstChild(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void GotoFirstChildForIndex(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void GotoNextSibling(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void StartPosition(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void EndPosition(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void CurrentNode(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void Reset(const Nan::FunctionCallbackInfo<v8::Value> &);
+ private:
+  Napi::Value GotoParent(const Napi::CallbackInfo &);
+  Napi::Value GotoFirstChild(const Napi::CallbackInfo &);
+  Napi::Value GotoFirstChildForIndex(const Napi::CallbackInfo &);
+  Napi::Value GotoNextSibling(const Napi::CallbackInfo &);
+  Napi::Value StartPosition(const Napi::CallbackInfo &);
+  Napi::Value EndPosition(const Napi::CallbackInfo &);
+  Napi::Value CurrentNode(const Napi::CallbackInfo &);
+  Napi::Value Reset(const Napi::CallbackInfo &);
 
-  static void NodeType(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
-  static void NodeIsNamed(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
-  static void NodeIsMissing(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
-  static void CurrentFieldName(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
-  static void StartIndex(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
-  static void EndIndex(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
+  Napi::Value NodeType(const Napi::CallbackInfo &);
+  Napi::Value NodeIsNamed(const Napi::CallbackInfo &);
+  Napi::Value NodeIsMissing(const Napi::CallbackInfo &);
+  Napi::Value CurrentFieldName(const Napi::CallbackInfo &);
+  Napi::Value StartIndex(const Napi::CallbackInfo &);
+  Napi::Value EndIndex(const Napi::CallbackInfo &);
 
   TSTreeCursor cursor_;
 };

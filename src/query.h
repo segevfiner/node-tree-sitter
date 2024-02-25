@@ -14,7 +14,7 @@ class Query : public Napi::ObjectWrap<Query> {
   static void Init(Napi::Env env, Napi::Object exports);
   static Query *UnwrapQuery(const Napi::Value &);
 
-  explicit Query(const CallbackInfo &info);
+  explicit Query(const Napi::CallbackInfo &info);
   ~Query();
 
   TSQuery *query_;

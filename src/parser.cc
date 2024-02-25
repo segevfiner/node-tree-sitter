@@ -101,11 +101,11 @@ void Parser::Init(Napi::Env env, Napi::Object exports) {
   auto data = env.GetInstanceData<AddonData>();
 
   Function ctor = DefineClass(env, "Parser", {
-    InstanceMethod("getLogger", GetLogger, napi_default_method),
-    InstanceMethod("setLogger", SetLogger, napi_default_method),
-    InstanceMethod("setLanguage", SetLanguage, napi_default_method),
-    InstanceMethod("printDotGraphs", PrintDotGraphs, napi_default_method),
-    InstanceMethod("parse", Parse, napi_default_method),
+    InstanceMethod("getLogger", &Parser::GetLogger, napi_default_method),
+    InstanceMethod("setLogger", &Parser::SetLogger, napi_default_method),
+    InstanceMethod("setLanguage", &Parser::SetLanguage, napi_default_method),
+    InstanceMethod("printDotGraphs", &Parser::PrintDotGraphs, napi_default_method),
+    InstanceMethod("parse", &Parser::Parse, napi_default_method),
   });
 
   data->parser_constructor = Napi::Persistent(ctor);
@@ -114,7 +114,7 @@ void Parser::Init(Napi::Env env, Napi::Object exports) {
 
   String s = String::New(env, "");
   Napi::Value string_slice_value = s.As<Object>()["slice"];
-  data->string_slice = Napi::Persistent(s.As<Function>());
+  data->string_slice = Napi::Persistent(string_slice_value.As<Function>());
 }
 
 Parser::Parser(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Parser>(info), parser_(ts_parser_new()) {}
@@ -152,6 +152,7 @@ Napi::Value Parser::SetLanguage(const Napi::CallbackInfo &info) {
     ts_parser_set_language(parser_, language);
     return info.This();
   }
+  return info.Env().Undefined();
 }
 
 Napi::Value Parser::Parse(const CallbackInfo &info) {
@@ -177,7 +178,7 @@ Napi::Value Parser::Parse(const CallbackInfo &info) {
   Napi::Value buffer_size = env.Null();
   if (info.Length() > 2) buffer_size = info[2];
 
-  if (!handle_included_ranges(env, parser_, info[3])) return;
+  if (!handle_included_ranges(env, parser_, info[3])) return env.Undefined();
 
   CallbackInput callback_input(callback, buffer_size);
   TSTree *tree = ts_parser_parse(parser_, old_tree, callback_input.Input());

@@ -14,7 +14,6 @@ const TSLanguage *UnwrapLanguage(const Napi::Value &value) {
   Napi::Env env = value.Env();
 
   if (value.IsExternal()) {
-    // TODO We should type tag the language external for safety
     External arg = value.As<External<const TSLanguage>>();
     const TSLanguage *language = arg.Data();
     if (language) {
@@ -41,7 +40,7 @@ static Napi::Value GetNodeTypeNamesById(const Napi::CallbackInfo &info) {
   Env env = info.Env();
 
   const TSLanguage *language = UnwrapLanguage(info[0]);
-  if (!language) return;
+  if (!language) return env.Undefined();
 
   auto result = Array::New(env);
   uint32_t length = ts_language_symbol_count(language);
@@ -62,7 +61,7 @@ static Napi::Value GetNodeFieldNamesById(const Napi::CallbackInfo &info) {
   Env env = info.Env();
 
   const TSLanguage *language = UnwrapLanguage(info[0]);
-  if (!language) return;
+  if (!language) return env.Undefined();
 
   auto result = Array::New(env);
   uint32_t length = ts_language_field_count(language);

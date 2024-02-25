@@ -29,9 +29,9 @@ void Query::Init(Napi::Env env, Napi::Object exports) {
   data->ts_query_cursor = ts_query_cursor_new();
 
   Function ctor = DefineClass(env, "Query", {
-    InstanceMethod("_matches", Matches, napi_default_method),
-    InstanceMethod("_captures", Captures, napi_default_method),
-    InstanceMethod("_getPredicates", GetPredicates, napi_default_method),
+    InstanceMethod("_matches", &Query::Matches, napi_default_method),
+    InstanceMethod("_captures", &Query::Captures, napi_default_method),
+    InstanceMethod("_getPredicates", &Query::GetPredicates, napi_default_method),
   });
 
   data->query_constructor = Napi::Persistent(ctor);
@@ -46,7 +46,6 @@ Query::Query(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Query>(info) , q
   uint32_t source_len;
   uint32_t error_offset = 0;
   TSQueryError error_type = TSQueryErrorNone;
-  TSQuery *query;
 
   if (language == nullptr) {
     throw Error::New(env, "Missing language argument");
@@ -57,12 +56,12 @@ Query::Query(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Query>(info) , q
     std::string utf8_string = string.Utf8Value();
     source = utf8_string.data();
     source_len = utf8_string.length();
-    query = ts_query_new(language, source, source_len, &error_offset, &error_type);
+    query_ = ts_query_new(language, source, source_len, &error_offset, &error_type);
   } else if (info[1].IsBuffer()) {
     Buffer buf = info[1].As<Buffer<char>>();
     source = buf.Data();
     source_len = buf.Length();
-    query = ts_query_new(language, source, source_len, &error_offset, &error_type);
+    query_ = ts_query_new(language, source, source_len, &error_offset, &error_type);
   }
   else {
     throw Error::New(env, "Missing source argument");
@@ -88,7 +87,6 @@ Query *Query::UnwrapQuery(const Napi::Value &value) {
   auto data = value.Env().GetInstanceData<AddonData>();
   if (!value.IsObject()) return nullptr;
   Napi::Object js_query = value.As<Object>();
-  // TODO We probably want to check a type tag instead
   if (!js_query.InstanceOf(data->query_constructor.Value())) return nullptr;
   return Query::Unwrap(js_query);
 }

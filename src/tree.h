@@ -15,6 +15,9 @@ class Tree : public Napi::ObjectWrap<Tree> {
   static Napi::Value NewInstance(Napi::Env env, TSTree *);
   static const Tree *UnwrapTree(const Napi::Value &);
 
+  explicit Tree(const Napi::CallbackInfo &);
+  ~Tree();
+
   struct NodeCacheEntry {
     Tree *tree;
     const void *key;
@@ -25,17 +28,13 @@ class Tree : public Napi::ObjectWrap<Tree> {
   std::unordered_map<const void *, NodeCacheEntry *> cached_nodes_;
 
  private:
-  explicit Tree(TSTree *);
-  ~Tree();
-
-  static void New(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void Edit(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void RootNode(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void PrintDotGraph(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void GetEditedRange(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void GetChangedRanges(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void CacheNode(const Nan::FunctionCallbackInfo<v8::Value> &);
-  static void CacheNodes(const Nan::FunctionCallbackInfo<v8::Value> &);
+  Napi::Value Edit(const Napi::CallbackInfo &);
+  Napi::Value RootNode(const Napi::CallbackInfo &);
+  Napi::Value PrintDotGraph(const Napi::CallbackInfo &);
+  Napi::Value GetEditedRange(const Napi::CallbackInfo &);
+  Napi::Value GetChangedRanges(const Napi::CallbackInfo &);
+  Napi::Value CacheNode(const Napi::CallbackInfo &);
+  Napi::Value CacheNodes(const Napi::CallbackInfo &);
 
 };
 
