@@ -12,7 +12,7 @@ namespace node_tree_sitter {
 class Tree : public Napi::ObjectWrap<Tree> {
  public:
   static void Init(Napi::Env env, Napi::Object exports);
-  static v8::Local<v8::Value> NewInstance(Napi::Env env, TSTree *);
+  static Napi::Value NewInstance(Napi::Env env, TSTree *);
   static const Tree *UnwrapTree(const Napi::Value &);
 
   struct NodeCacheEntry {
