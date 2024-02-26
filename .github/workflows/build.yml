@@ -88,4 +88,3 @@ jobs:
       - run: ${{ env.PREBUILD_CMD }}
       - if: runner.os == 'macOS'
         run: ${{ env.PREBUILD_CMD }} --arch arm64
-      - run: ${{ env.NODE_PREBUILD_CMD }}
