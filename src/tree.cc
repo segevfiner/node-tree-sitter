@@ -28,7 +28,9 @@ void Tree::Init(Napi::Env env, Napi::Object exports) {
   exports["Tree"] = ctor;
 }
 
-Tree::Tree(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Tree>(info), tree_(nullptr) {}
+Tree::Tree(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Tree>(info), tree_(nullptr) {
+  Value().TypeTag(&TYPE_TAG);
+}
 
 Tree::~Tree() {
   ts_tree_delete(tree_);
@@ -49,12 +51,11 @@ Napi::Value Tree::NewInstance(Napi::Env env, TSTree *tree) {
 }
 
 const Tree *Tree::UnwrapTree(const Napi::Value &value) {
-  auto *data = value.Env().GetInstanceData<AddonData>();
   if (!value.IsObject()) {
     return nullptr;
   }
   auto js_tree = value.As<Object>();
-  if (!js_tree.InstanceOf(data->tree_constructor.Value())) {
+  if (!js_tree.CheckTypeTag(&TYPE_TAG)) {
     return nullptr;
   }
   return Tree::Unwrap(js_tree);

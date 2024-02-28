@@ -12,6 +12,10 @@ namespace node_tree_sitter {
 
 class Tree : public Napi::ObjectWrap<Tree> {
  public:
+  static constexpr napi_type_tag TYPE_TAG = {
+    0x32EA7ED51F284DAE, 0x9BBD75ACAE8DFD7D
+  };
+
   static void Init(Napi::Env env, Napi::Object exports);
   static Napi::Value NewInstance(Napi::Env env, TSTree *);
   static const Tree *UnwrapTree(const Napi::Value &);

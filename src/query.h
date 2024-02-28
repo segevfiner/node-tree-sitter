@@ -11,6 +11,10 @@ namespace node_tree_sitter {
 
 class Query : public Napi::ObjectWrap<Query> {
  public:
+  static constexpr napi_type_tag TYPE_TAG = {
+    0x0B236F23456A4B87, 0x86BAC1E58CA6897B
+  };
+
   static void Init(Napi::Env env, Napi::Object exports);
   static Query *UnwrapQuery(const Napi::Value &);
 

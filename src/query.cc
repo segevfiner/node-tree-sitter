@@ -37,6 +37,8 @@ void Query::Init(Napi::Env env, Napi::Object exports) {
 Query::Query(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Query>(info) , query_(nullptr) {
   Napi::Env env = info.Env();
 
+  Value().TypeTag(&TYPE_TAG);
+
   const TSLanguage *language = language_methods::UnwrapLanguage(info[0]);
   const char *source;
   uint32_t source_len;
@@ -80,12 +82,11 @@ Query::~Query() {
 }
 
 Query *Query::UnwrapQuery(const Napi::Value &value) {
-  auto *data = value.Env().GetInstanceData<AddonData>();
   if (!value.IsObject()) {
     return nullptr;
   }
   auto js_query = value.As<Object>();
-  if (!js_query.InstanceOf(data->query_constructor.Value())) {
+  if (!js_query.CheckTypeTag(&TYPE_TAG)) {
     return nullptr;
   }
   return Query::Unwrap(js_query);
