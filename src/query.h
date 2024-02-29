@@ -11,8 +11,13 @@ namespace node_tree_sitter {
 
 class Query : public Napi::ObjectWrap<Query> {
  public:
+  // tstag() {
+  //   b2sum -l64 <(printf tree-sitter) <(printf "$1") | \
+  //   awk '{printf "0x" toupper($1) (NR == 1 ? ", " : "\n")}'
+  // }
+  // tstag query # => 0x8AF2E5212AD58ABF, 0x7B1FAB666CBD6803
   static constexpr napi_type_tag TYPE_TAG = {
-    0x0B236F23456A4B87, 0x86BAC1E58CA6897B
+    0x8AF2E5212AD58ABF, 0x7B1FAB666CBD6803
   };
 
   static void Init(Napi::Env env, Napi::Object exports);
